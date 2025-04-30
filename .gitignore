@@ -4,7 +4,7 @@ skynet/
 
 # Ignore Jupyter notebook checkpoints
 .ipynb_checkpoints/
-
+./analysis/ipynb_checkpoints
 # Ignore IDE/editor-specific files
 .vscode/
 .idea/
