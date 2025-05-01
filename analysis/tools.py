@@ -14,12 +14,19 @@ def int_convet(x:str):
         return int(x)
     except ValueError:
         return x
-    
+
 def merge_and_pop(lst:list):
     '''merges and pops the name'''
-    lst[1] = lst[1] + ' ' + lst[2]
-    lst.pop(2)
+    if ',' in lst[1] | ', ' in lst[1]: #aldready triggering, or is redundant
+        last, first = lst[1].split(',')
+        last, first = last.lower(), first.lower()
+        lst[1] = first.capitalize() + ' ' + last.capitalize()
+    else:
+        lst[1] = lst[1] + ' ' + lst[2]
+        lst.pop(2)
     return lst
+
+
 
 def non_start(lst:list):
     '''fills in a value if the player didn't start'''
@@ -46,3 +53,15 @@ def get_opponent(raw_text:str):
     return team1
 
 
+def folder_to_list(folder_path:str):
+
+    folder = os.listdir(folder_path)
+    folder.remove('.DS_Store')
+    files = []
+    for file in folder:
+        files.append(folder_path + '/' + file)
+    
+    return files
+
+folder_to_list('../data/pdf')
+# %%
