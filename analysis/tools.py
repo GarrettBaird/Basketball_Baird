@@ -22,7 +22,6 @@ def merge_and_pop(lst:list):
     if ',' in lst[1]:
 
         last, first = lst[1].split(',')
-        print(last, first)
         last, first = last.strip(), first.strip()
         last, first = last.lower(), first.lower()
         lst[1] = first.capitalize() + ' ' + last.capitalize()
