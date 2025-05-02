@@ -16,16 +16,20 @@ def int_convet(x:str):
         return x
 
 def merge_and_pop(lst:list):
-    '''merges and pops the name'''
-    if ',' in lst[1] | ', ' in lst[1]: #aldready triggering, or is redundant
+    '''
+    merges and pops the name
+    '''
+    if ',' in lst[1]:
+
         last, first = lst[1].split(',')
+        print(last, first)
+        last, first = last.strip(), first.strip()
         last, first = last.lower(), first.lower()
         lst[1] = first.capitalize() + ' ' + last.capitalize()
     else:
         lst[1] = lst[1] + ' ' + lst[2]
         lst.pop(2)
     return lst
-
 
 
 def non_start(lst:list):
@@ -52,7 +56,6 @@ def get_opponent(raw_text:str):
             return team2
     return team1
 
-
 def folder_to_list(folder_path:str):
 
     folder = os.listdir(folder_path)
@@ -63,5 +66,4 @@ def folder_to_list(folder_path:str):
     
     return files
 
-folder_to_list('../data/pdf')
 # %%
