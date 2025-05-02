@@ -30,7 +30,6 @@ def merge_and_pop(lst:list):
         lst.pop(2)
     return lst
 
-
 def non_start(lst:list):
     '''fills in a value if the player didn't start'''
     if lst[2] != '*':
@@ -64,5 +63,65 @@ def folder_to_list(folder_path:str):
         files.append(folder_path + '/' + file)
     
     return files
+
+def folder_to_dict(folder_path:str, test:bool = False) -> dict:
+    '''
+    Converts the pdf files to a csv file as long as it follows the same format as the example files.
+    By product is printing the name of the players. Will fix later for now its a "Quirk".
+    '''
+    if test:
+        folder = [folder_path]
+    else:
+        folder = folder_to_list(folder_path)
+
+    i = 0 # used to track the number of files
+
+    for file in folder:
+        #print(i, file)
+        with pdfplumber.open(file, pages= [1]) as pdf:
+            
+            # Extract text from each page
+            text = ""
+            for page in pdf.pages:
+                text += page.extract_text();
+
+
+        matches = re.findall(r'Southern Oregon \d+..(#[\s\S]+?..TM T)', text, re.DOTALL)
+        matches[0] = matches[0].replace(', ', ',')
+
+        matches_date = re.findall(r'Date: \s*(........)', text)
+
+        stats = matches[0]
+        stats = stats.strip().split(sep = '\n')
+        split_stats = list(map(str.split, stats))
+
+        opponent = get_opponent(text)
+        title = split_stats[0] + ['Opponent'] + ['Date']
+
+        players = split_stats[1:-1]
+        #ISSUE HERE
+
+        players = list(map(merge_and_pop, players))
+        players = list(map(non_start, players))
+        #ISSUE HERE
+        if i == 0:
+            stat_dict = {key: [] for key in title}
+
+        for player in players:
+
+            for stat, data in zip(title, player):
+                stat_dict[stat].append(data)
+            # stat_dict['Opponent'].append(opponent)#new
+            # stat_dict['Date'].append(matches_date[0])#new
+        for name in split_stats[1:-1]:
+            stat_dict['Opponent'].append(opponent)
+            stat_dict['Date'].append(matches_date[0])
+ 
+        if len(stat_dict['PTS']) != len(stat_dict['Player'] or test == True):
+            print(matches_date, 'Length of PTS and Player do not match')
+            #return
+        i += 1
+
+    return (stat_dict)
 
 # %%
